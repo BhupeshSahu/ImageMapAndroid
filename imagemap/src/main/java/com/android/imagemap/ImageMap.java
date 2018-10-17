@@ -29,6 +29,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
+import com.android.bigimage.BigImage;
+
 import static android.content.Context.WINDOW_SERVICE;
 
 /**
@@ -339,6 +341,11 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
     public boolean onSingleTapConfirmed(MotionEvent e) {
         clickOnImage(e);
         return true;
+    }
+
+    @Override
+    public boolean resetToOverviewMode() {
+        return super.resetToOverviewMode();
     }
 
     @Override
