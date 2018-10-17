@@ -4,7 +4,7 @@ Credit to [Konstantin Burov](https://github.com/aectann)
 
 Its an extension to what he has created github project [socratica-android](https://github.com/aectann/socratica-android)
 
-Add following gradle depency to 
+Add following gradle dependency to your project's `build.gradle`
 ```
 implementation 'com.github.BhupeshSahu.ImageMapAndroid:imagemap:v1.1'
 ```  
