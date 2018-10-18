@@ -25,7 +25,7 @@ Add following code in your `layout.xml` where you want to put `ImageMap`
 Where 
 `src` is the source image which will be map
 
-`app:map` is an html imagemap file you can learn to create it [here](https://www.w3schools.com/tags/tag_map.asp)
+`app:map` is an html imagemap file. You can learn to create it [here](https://www.w3schools.com/tags/tag_map.asp)
 
 `selectionPadding` is padding applied for filling the color in area
 
