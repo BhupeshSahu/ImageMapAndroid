@@ -22,7 +22,15 @@ Add following code in your `layout.xml` where you want to put `ImageMap`
         app:selectionStrokeWidth="2"
         app:selectionType="stroke" />
 ```
-Where `src` is the source image which will be map and `app:map` is an html `imagemap` file you can learn to create it [here](https://www.w3schools.com/tags/tag_map.asp)
+Where 
+`src` is the source image which will be map 
+`app:map` is an html imagemap file you can learn to create it [here](https://www.w3schools.com/tags/tag_map.asp)
+`selectionPadding` is padding applied for filling the color in area
+`seletionType` can be `stoke/fill`
+`selectionColor` is color for highlighting the selected area
+`selectionStrokeWidth` is width of selection if `selectionType` is `stroke`
+
+There are plenty of applications to create imagemap xml file by selecting regions in image. An open source application is [GIMP](https://www.gimp.org/downloads/)
 
 To get event callback for area click, add following code in your `Activity` file
 ```java
