@@ -10,8 +10,6 @@
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/floormap"
-        app:map="@xml/floor"
         app:selectionColor="#f00"
         app:selectionPadding="50dp"
         app:selectionStrokeWidth="2"

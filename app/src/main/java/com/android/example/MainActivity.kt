@@ -13,8 +13,9 @@ class MainActivity : AppCompatActivity() {
         map.setImageMapListener {
             map.showArea(it)
             Toast.makeText(this, "Area clicked $it", Toast.LENGTH_SHORT).show()
-
         }
+        map.setImageResource(R.drawable.floormap)
+        map.setMap(R.xml.floor);
     }
 
     override fun onBackPressed() {

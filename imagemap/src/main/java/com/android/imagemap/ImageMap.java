@@ -17,6 +17,7 @@ package com.android.imagemap;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
@@ -67,8 +68,6 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
     public static final int RED_OVERLAY_COLOR = 0xffff0000;
 
     private final int defaultColor;
-    private final int defaultSelectionType;
-    private final float defaultSelectionStrokeWidth;
 
     private Path[] areaPaths;
     private Path path;
@@ -91,16 +90,32 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
         manager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.ImageMap);
         mapResource = attributes.getResourceId(R.styleable.ImageMap_map, 0);
-        if (mapResource == 0) {
-            throw new IllegalStateException("map attribute must be specified");
-        }
+//        if (mapResource == 0) {
+//            throw new IllegalStateException("map attribute must be specified");
+//        }
         boundPad = attributes.getDimensionPixelSize(R.styleable.ImageMap_selectionPadding, 50);
-        defaultSelectionType = attributes.getInt(R.styleable.ImageMap_selectionType, 0);
+        int defaultSelectionType = attributes.getInt(R.styleable.ImageMap_selectionType, 0);
         defaultColor = attributes.getColor(R.styleable.ImageMap_selectionColor, GREEN_OVERLAY_COLOR);
         defaultPaintType = new PaintType(defaultSelectionType == 0 ? Style.FILL : Style.STROKE, defaultColor);
-        defaultSelectionStrokeWidth = attributes.getFloat(R.styleable.ImageMap_selectionStrokeWidth, 4);
+        float defaultSelectionStrokeWidth = attributes.getFloat(R.styleable.ImageMap_selectionStrokeWidth, 4);
         attributes.recycle();
 
+        if (mapResource != 0) {
+            initMap();
+        }
+
+        region = new Region();
+        bounds = new RectF();
+        path = new Path();
+        areasToDraw = new int[0];
+
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(defaultColor);
+        paint.setStrokeWidth(defaultSelectionStrokeWidth);
+    }
+
+    private void initMap() {
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -117,16 +132,11 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
                 }
             }
         }).start();
+    }
 
-        region = new Region();
-        bounds = new RectF();
-        path = new Path();
-        areasToDraw = new int[0];
-
-        paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setColor(defaultColor);
-        paint.setStrokeWidth(defaultSelectionStrokeWidth);
+    public void setMap(int resourceId) {
+        mapResource = resourceId;
+        initMap();
     }
 
     public int getMapResource() {
@@ -344,8 +354,9 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
     }
 
     @Override
-    public boolean resetToOverviewMode() {
-        return super.resetToOverviewMode();
+    public void setImageBitmap(Bitmap bm) {
+        super.setImageBitmap(bm);
+        initBounds();
     }
 
     @Override
