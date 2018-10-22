@@ -31,35 +31,35 @@ import java.util.ArrayList;
  */
 public class SimpleResourceCache implements ImageMapResourcesCache {
 
-    private SparseArray<Object> dataIds;
-    private SparseArray<Object> paths;
+    private Object dataIds;
+    private Object paths;
     private MapParser mapParser;
-    private SparseArray<SparseArray<ArrayList<Integer>>> areaGroups;
+    private SparseArray<ArrayList<Integer>> areaGroups;
 
-    public SimpleResourceCache(MapParser mapParser) {
-        dataIds = new SparseArray<>();
-        paths = new SparseArray<>();
-        areaGroups = new SparseArray<>();
+    SimpleResourceCache(MapParser mapParser) {
+        dataIds = null;
+        paths = null;
+        areaGroups = null;
         this.mapParser = mapParser;
     }
 
     @Override
-    public synchronized Path[] getAreaPaths(Context context, Integer mapResourceId) {
-        if (dataIds.indexOfKey(mapResourceId) > -1) {
-            return (Path[]) paths.get(mapResourceId);
+    public synchronized Path[] getAreaPaths(Context context, MapResource mapResource) {
+        if (dataIds != null) {
+            return (Path[]) paths;
         }
         try {
-            init(context, mapResourceId);
+            init(context, mapResource);
         } catch (Exception e) {
             throw new IllegalStateException("Failed to init image map areas", e);
         }
         notify();
-        return (Path[]) paths.get(mapResourceId);
+        return (Path[]) paths;
     }
 
-    public synchronized void init(Context context, int mapResource)
+    public synchronized void init(Context context, MapResource mapResource)
             throws XmlPullParserException, IOException {
-        if (dataIds.indexOfKey(mapResource) < 0) {
+        if (dataIds == null) {
             ArrayList<MapParser.Area> areas = mapParser.parseAreas(context, mapResource);
             int size = areas.size();
             int[][] areaIds = new int[size][2];
@@ -76,35 +76,36 @@ public class SimpleResourceCache implements ImageMapResourcesCache {
                 groupsByData.get(a.id).add(a.target);
                 i++;
             }
-            dataIds.put(mapResource, areaIds);
-            paths.put(mapResource, areaPaths);
-            areaGroups.put(mapResource, groupsByData);
+            dataIds = areaIds;
+            paths = areaPaths;
+            areaGroups = groupsByData;
         }
     }
 
     @Override
-    public int getDataId(Context context, Integer mapResourceId, Integer pathIndex) {
-        if (dataIds.indexOfKey(mapResourceId) < 0) {
+    public int getDataId(Context context, MapResource resource, Integer pathIndex) {
+        if (dataIds == null) {
             try {
-                init(context, mapResourceId);
+                init(context, resource);
             } catch (Exception e) {
                 throw new IllegalStateException("Failed to init image map areas", e);
             }
         }
-        return ((int[][]) dataIds.get(mapResourceId))[pathIndex][0];
+        return ((int[][]) dataIds)[pathIndex][0];
     }
 
+
     @Override
-    public int getAreaId(Context context, Integer mapResourceId, Integer dataId,
+    public int getAreaId(Context context, MapResource mapResource, Integer dataId,
                          Integer target) {
-        if (dataIds.indexOfKey(mapResourceId) < 0) {
+        if (dataIds == null) {
             try {
-                init(context, mapResourceId);
+                init(context, mapResource);
             } catch (Exception e) {
                 throw new IllegalStateException("Failed to init image map areas", e);
             }
         }
-        int[][] ids = (int[][]) this.dataIds.get(mapResourceId);
+        int[][] ids = (int[][]) this.dataIds;
         for (int i = 0; i < ids.length; i++) {
             if (dataId == ids[i][0] && (target == -1 || target == ids[i][1])) {
                 return i;
@@ -114,20 +115,19 @@ public class SimpleResourceCache implements ImageMapResourcesCache {
     }
 
     @Override
-    public int getAreaId(Context context, Integer mapResource, Integer id) {
+    public int getAreaId(Context context, MapResource mapResource, Integer id) {
         return getAreaId(context, mapResource, id, -1);
     }
 
     @Override
-    public ArrayList<Integer> getAreaGroups(Context context,
-                                            Integer mapResourceId, Integer dataId) {
-        if (areaGroups.indexOfKey(mapResourceId) < 0) {
+    public ArrayList<Integer> getAreaGroups(Context context, MapResource mapResource, Integer dataId) {
+        if (areaGroups == null) {
             try {
-                init(context, mapResourceId);
+                init(context, mapResource);
             } catch (Exception e) {
                 throw new IllegalStateException("Failed to init image map areas", e);
             }
         }
-        return areaGroups.get(mapResourceId).get(dataId);
+        return areaGroups.get(dataId);
     }
 }

@@ -78,7 +78,7 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
     private PaintType[] colorsToDraw;
     private boolean pathsInitialized;
     private int[] taskAreasIds;
-    private int mapResource;
+    private MapResource mapResource;
     private WindowManager manager;
     private int boundPad;
     private SimpleResourceCache simpleResourceCache;
@@ -89,10 +89,11 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
         super(context, attrs);
         manager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.ImageMap);
-        mapResource = attributes.getResourceId(R.styleable.ImageMap_map, 0);
-//        if (mapResource == 0) {
+        int resId = attributes.getResourceId(R.styleable.ImageMap_map, 0);
+        if (resId != 0) {
+            mapResource = new MapResource(resId);
 //            throw new IllegalStateException("map attribute must be specified");
-//        }
+        }
         boundPad = attributes.getDimensionPixelSize(R.styleable.ImageMap_selectionPadding, 50);
         int defaultSelectionType = attributes.getInt(R.styleable.ImageMap_selectionType, 0);
         defaultColor = attributes.getColor(R.styleable.ImageMap_selectionColor, GREEN_OVERLAY_COLOR);
@@ -100,7 +101,7 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
         float defaultSelectionStrokeWidth = attributes.getFloat(R.styleable.ImageMap_selectionStrokeWidth, 4);
         attributes.recycle();
 
-        if (mapResource != 0) {
+        if (mapResource != null) {
             initMap();
         }
 
@@ -134,13 +135,9 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
         }).start();
     }
 
-    public void setMap(int resourceId) {
-        mapResource = resourceId;
+    public void setMap(MapResource resource) {
+        mapResource = resource;
         initMap();
-    }
-
-    public int getMapResource() {
-        return mapResource;
     }
 
     @Override

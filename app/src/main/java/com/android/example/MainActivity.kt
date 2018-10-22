@@ -3,6 +3,7 @@ package com.android.example
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.android.imagemap.MapResource
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -15,7 +16,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Area clicked $it", Toast.LENGTH_SHORT).show()
         }
         map.setImageResource(R.drawable.floormap)
-        map.setMap(R.xml.floor);
+        map.setMap(MapResource(R.xml.floor))
     }
 
     override fun onBackPressed() {

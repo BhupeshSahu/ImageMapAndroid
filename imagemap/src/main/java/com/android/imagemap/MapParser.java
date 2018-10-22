@@ -31,7 +31,7 @@ import java.util.ArrayList;
  */
 public interface MapParser {
 
-  ArrayList<Area> parseAreas(Context context, int mapResource)
+  ArrayList<Area> parseAreas(Context context, MapResource mapResource)
       throws XmlPullParserException, IOException;
 
   static final String ATTR_HREF = "href";

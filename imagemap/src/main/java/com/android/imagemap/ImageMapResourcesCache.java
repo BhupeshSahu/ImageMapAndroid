@@ -28,15 +28,15 @@ import java.util.ArrayList;
  */
 public interface ImageMapResourcesCache {
 
-  Path[] getAreaPaths(Context context, Integer xmlResourceId);
+  Path[] getAreaPaths(Context context, MapResource resource);
 
-  int getDataId(Context context, Integer xmlResourceId, Integer pathIndex);
+  int getDataId(Context context, MapResource resource, Integer pathIndex);
 
-  int getAreaId(Context context, Integer xmlResourceId, Integer dataId,
+  int getAreaId(Context context, MapResource resource, Integer dataId,
                 Integer target);
 
-  int getAreaId(Context context, Integer xmlResourceId, Integer dataId);
+  int getAreaId(Context context, MapResource resource, Integer dataId);
 
-  ArrayList<Integer> getAreaGroups(Context context, Integer xmlResourceId,
+  ArrayList<Integer> getAreaGroups(Context context, MapResource resource,
                                    Integer dataId);
 }
