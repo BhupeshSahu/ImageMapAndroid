@@ -48,7 +48,7 @@ import java.util.Map;
 public class BigImage extends android.support.v7.widget.AppCompatImageView implements OnGestureListener,
         OnTouchListener {
 
-    private static final Map<String, SoftReference<Drawable>> DRAWABLE_CACHE = new HashMap<String, SoftReference<Drawable>>();
+    private static final Map<String, SoftReference<Drawable>> DRAWABLE_CACHE = new HashMap<>();
 
     protected float scale;
     protected float viewWidth;
@@ -68,7 +68,8 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
 
     public BigImage(Context context, AttributeSet attrs) {
         super(context, attrs);
-        bitmapResource = attrs.getAttributeResourceValue("http://schemas.android.com/apk/res/android", "src", 0);
+        bitmapResource = attrs.getAttributeResourceValue("http://schemas.android.com/apk/res/android",
+                "src", 0);
         setFocusable(true);
         setFocusableInTouchMode(true);
         gestureDetector = new GestureDetector(context, this);
@@ -126,8 +127,10 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
     protected synchronized void initBounds() {
         if (viewWidth > 0 && viewHeight > 0 && (bitmapResource > 0 || file != null)) {
             Options opt = loadBitmapOpts();
-            imageWidth = opt.outWidth;
-            imageHeight = opt.outHeight;
+            if (opt != null) {
+                imageWidth = opt.outWidth;
+                imageHeight = opt.outHeight;
+            }
             float[] f = new float[9];
             getImageMatrix().getValues(f);
             initScale = f[0];
@@ -177,8 +180,12 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
         this.file = file;
         this.bitmapResource = 0;
         if (drawable != null) {
+            if (drawable instanceof BitmapDrawable) {
+                imageWidth = ((BitmapDrawable) drawable).getBitmap().getWidth();
+                imageHeight = ((BitmapDrawable) drawable).getBitmap().getHeight();
+            }
             DRAWABLE_CACHE.put(getDrawableKey(),
-                    new SoftReference<Drawable>(drawable));
+                    new SoftReference<>(drawable));
         }
         setImageDrawable(getImage());
     }
@@ -196,12 +203,16 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
         if (bitmapResource > 0) {
             stream = getResources().openRawResource(bitmapResource);
         } else {
+            if (file.startsWith("http")) {
+                return null;
+            }
             try {
                 stream = new BufferedInputStream(new FileInputStream(file));
             } catch (FileNotFoundException e) {
                 throw new IllegalStateException(e);
             }
         }
+
         BitmapFactory.decodeStream(stream, null, opts);
         return opts;
     }

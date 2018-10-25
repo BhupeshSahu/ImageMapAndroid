@@ -30,12 +30,12 @@ public class MapResource {
         this.resourceId = resourceId;
     }
 
-    public MapResource(ResourceType resourceType, String url, String rawStrng) {
+    public MapResource(ResourceType resourceType, String url, String rawString) {
         this.resourceType = resourceType;
         if (resourceType == ResourceType.LOCAL_FILE)
             this.url = url;
         else if (resourceType == ResourceType.RAW_STRING)
-            this.rawString = rawStrng;
+            this.rawString = rawString;
     }
 
     XmlPullParser getParser(Context context) throws XmlPullParserException, FileNotFoundException {
