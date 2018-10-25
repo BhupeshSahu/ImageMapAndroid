@@ -37,6 +37,12 @@ public class MapResource {
             this.rawString = rawString;
     }
 
+    public MapResource(String rawString) {
+        resourceType = ResourceType.RAW_STRING;
+        this.rawString = rawString;
+    }
+
+
     XmlPullParser getParser(Context context) throws XmlPullParserException, FileNotFoundException {
         switch (resourceType) {
             case INTERNAL_RESOURCE:
