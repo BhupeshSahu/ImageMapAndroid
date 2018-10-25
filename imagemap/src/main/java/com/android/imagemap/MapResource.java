@@ -23,7 +23,6 @@ public class MapResource {
     private String url = "";
     private String rawString = "";
 
-    public enum ResourceType {INTERNAL_RESOURCE, LOCAL_FILE, RAW_STRING}
 
     public MapResource(int resourceId) {
         this.resourceType = ResourceType.INTERNAL_RESOURCE;
