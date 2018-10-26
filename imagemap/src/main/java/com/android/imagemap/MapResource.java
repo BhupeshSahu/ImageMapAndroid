@@ -29,12 +29,12 @@ public class MapResource {
         this.resourceId = resourceId;
     }
 
-    public MapResource(ResourceType resourceType, String url, String rawString) {
+    public MapResource(ResourceType resourceType, String resValue) {
         this.resourceType = resourceType;
         if (resourceType == ResourceType.LOCAL_FILE)
-            this.url = url;
+            this.url = resValue;
         else if (resourceType == ResourceType.RAW_STRING)
-            this.rawString = rawString;
+            this.rawString = resValue;
     }
 
     public MapResource(String rawString) {

@@ -129,6 +129,7 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
                         }
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     throw new IllegalStateException("Failed to init image map areas", e);
                 }
             }

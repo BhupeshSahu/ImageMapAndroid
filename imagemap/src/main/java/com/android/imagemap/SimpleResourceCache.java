@@ -51,6 +51,7 @@ public class SimpleResourceCache implements ImageMapResourcesCache {
         try {
             init(context, mapResource);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new IllegalStateException("Failed to init image map areas", e);
         }
         notify();
