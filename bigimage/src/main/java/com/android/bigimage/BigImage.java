@@ -183,9 +183,10 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
     }
 
     /**
-     * To set source image dynamically
+     * To set source image dynamically. Make sure while setting remote image file that resolution is
+     * same as original resolution in order to find exact coordinates while applying map definition
      *
-     * @param url      fully-qualified url(in case of remote url, it will only be used as key)
+     * @param url      fully-qualified url, in case of remote url, it will only be used as key
      * @param drawable drawable file in case of remote resource, can be null otherwise
      */
     public void setImageFile(String url, Drawable drawable) {
