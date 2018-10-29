@@ -23,7 +23,6 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
@@ -127,7 +126,6 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
     }
 
     protected synchronized void initBounds() {
-        Log.d(TAG, "initBounds: ");
         if (viewWidth > 0 && viewHeight > 0 && (bitmapResource > 0 || file != null)) {
             Options opt = loadBitmapOpts();
             if (opt != null) {
@@ -147,7 +145,6 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
             this.boundsInitialized = false;
         }
         if (!isLayoutRequested()) {
-            Log.d(TAG, "initBounds: Layout not requested");
             invalidate();
         }
     }
@@ -176,12 +173,23 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
         initBounds();
     }
 
+    /**
+     * To set local image file as source image
+     *
+     * @param file
+     */
     public void setImageFile(String file) {
         setImageFile(file, null);
     }
 
-    public void setImageFile(String file, Drawable drawable) {
-        this.file = file;
+    /**
+     * To set source image dynamically
+     *
+     * @param url      fully-qualified url(in case of remote url, it will only be used as key)
+     * @param drawable drawable file in case of remote resource, can be null otherwise
+     */
+    public void setImageFile(String url, Drawable drawable) {
+        this.file = url;
         this.bitmapResource = 0;
         if (drawable != null) {
             if (drawable instanceof BitmapDrawable) {
