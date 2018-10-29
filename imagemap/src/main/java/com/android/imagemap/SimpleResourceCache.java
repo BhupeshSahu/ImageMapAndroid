@@ -44,16 +44,13 @@ public class SimpleResourceCache implements ImageMapResourcesCache {
     }
 
     @Override
-    public synchronized Path[] getAreaPaths(Context context, MapResource mapResource) {
+    public synchronized Path[] getAreaPaths(Context context, MapResource mapResource) throws IOException, XmlPullParserException {
         if (dataIds != null) {
             return (Path[]) paths;
         }
-        try {
-            init(context, mapResource);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new IllegalStateException("Failed to init image map areas", e);
-        }
+
+        init(context, mapResource);
+
         notify();
         return (Path[]) paths;
     }

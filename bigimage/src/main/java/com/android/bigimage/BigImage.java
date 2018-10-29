@@ -23,6 +23,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
@@ -65,6 +66,7 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
     private double scaleFactor;
     private String file;
     private double prevDelta = 0;
+    private String TAG = "BigImage";
 
     public BigImage(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -115,7 +117,7 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
                 }
             }
             result.setBounds(0, 0, imageWidth, imageHeight);
-            DRAWABLE_CACHE.put(drawableKey, new SoftReference<Drawable>(result));
+            DRAWABLE_CACHE.put(drawableKey, new SoftReference<>(result));
         }
         return result;
     }
@@ -125,6 +127,7 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
     }
 
     protected synchronized void initBounds() {
+        Log.d(TAG, "initBounds: ");
         if (viewWidth > 0 && viewHeight > 0 && (bitmapResource > 0 || file != null)) {
             Options opt = loadBitmapOpts();
             if (opt != null) {
@@ -144,6 +147,7 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
             this.boundsInitialized = false;
         }
         if (!isLayoutRequested()) {
+            Log.d(TAG, "initBounds: Layout not requested");
             invalidate();
         }
     }
@@ -284,7 +288,7 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
     }
 
     /**
-     * Zooms map out, preserving currently centered point at the center of the
+     * Zooms map in, preserving currently centered point at the center of the
      * view.
      */
     public boolean scaleIn() {

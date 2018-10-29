@@ -18,6 +18,9 @@ package com.android.imagemap;
 import android.content.Context;
 import android.graphics.Path;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -28,7 +31,7 @@ import java.util.ArrayList;
  */
 public interface ImageMapResourcesCache {
 
-  Path[] getAreaPaths(Context context, MapResource resource);
+  Path[] getAreaPaths(Context context, MapResource resource) throws IOException, XmlPullParserException;
 
   int getDataId(Context context, MapResource resource, Integer pathIndex);
 

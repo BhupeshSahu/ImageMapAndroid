@@ -26,11 +26,14 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import com.android.bigimage.BigImage;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import static android.content.Context.WINDOW_SERVICE;
 
@@ -84,6 +87,7 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
     private SimpleResourceCache simpleResourceCache;
     private RectF bounds;
     private PaintType defaultPaintType;
+    private String TAG = getClass().getSimpleName();
 
     public ImageMap(final Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -117,20 +121,24 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
     }
 
     private void initMap() {
+        Log.d(TAG, "initMap: ");
         new Thread(new Runnable() {
             public void run() {
                 try {
                     synchronized (ImageMap.this) {
                         areaPaths = getCache().getAreaPaths(getContext(), mapResource);
+                        Log.d(TAG, "run: pathInitialized");
                         ImageMap.this.pathsInitialized = true;
                         ImageMap.this.notify();
                         if (boundsInitialized && taskAreasIds != null) {
                             showAreasSync(taskAreasIds, colorsToDraw);
                         }
                     }
+                } catch (XmlPullParserException xmlppex) {
+                    mapResource = null;
+                    xmlppex.printStackTrace();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new IllegalStateException("Failed to init image map areas", e);
                 }
             }
         }).start();
@@ -144,7 +152,9 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        Log.d(TAG, "onDraw: ");
         if (boundsInitialized && pathsInitialized) {
+            Log.d(TAG, "onDraw: bound and path initialized");
             if (areasToDraw != null) {
                 int i = 0;
                 for (int areaIndex : areasToDraw) {
@@ -162,7 +172,7 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
                 paint.setColor(defaultColor);
             }
         } else {
-            initBounds();
+//            initBounds();
         }
     }
 
@@ -176,7 +186,9 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
     @Override
     protected synchronized void initBounds() {
         super.initBounds();
+        Log.d(TAG, "initBounds: ");
         if (pathsInitialized && taskAreasIds != null) {
+            Log.d(TAG, "initBounds: paths initialized");
             showAreasSync(taskAreasIds, colorsToDraw);
         }
     }
@@ -234,6 +246,7 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
     }
 
     void showAreasSync(final int[] showAreaIds, final PaintType[] colors) {
+        Log.d(TAG, "showAreasSync: ");
         Path p = new Path();
         areasToDraw = new int[showAreaIds.length];
         colorsToDraw = colors;
@@ -320,6 +333,8 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
 //            if (scale < targetScale) {
 //                scaleTo(x, y, targetScale);
 //            } else {
+        if (areaPaths == null)
+            return;
         int length = areaPaths.length;
         Region region = this.region;
         RectF bounds = this.bounds;
@@ -347,6 +362,7 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
+        Log.d(TAG, "onSingleTapConfirmed: ");
         clickOnImage(e);
         return true;
     }
@@ -354,6 +370,7 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
     @Override
     public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
+        Log.d(TAG, "setImageBitmap: ");
         initBounds();
     }
 
