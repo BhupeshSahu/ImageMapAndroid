@@ -26,7 +26,6 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.WindowManager;
@@ -80,6 +79,7 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
     private Paint paint;
     private PaintType[] colorsToDraw;
     private boolean pathsInitialized;
+    private boolean panAndZoomSelection;
     private int[] taskAreasIds;
     private MapResource mapResource;
     private WindowManager manager;
@@ -102,6 +102,7 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
         int defaultSelectionType = attributes.getInt(R.styleable.ImageMap_selectionType, 0);
         defaultColor = attributes.getColor(R.styleable.ImageMap_selectionColor, GREEN_OVERLAY_COLOR);
         defaultPaintType = new PaintType(defaultSelectionType == 0 ? Style.FILL : Style.STROKE, defaultColor);
+        panAndZoomSelection = attributes.getBoolean(R.styleable.ImageMap_panAndZoomSelection, false);
         float defaultSelectionStrokeWidth = attributes.getFloat(R.styleable.ImageMap_selectionStrokeWidth, 4);
         attributes.recycle();
 
@@ -253,9 +254,11 @@ public class ImageMap extends BigImage implements GestureDetector.OnDoubleTapLis
         DisplayMetrics outMetrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(outMetrics);
 
-        float w = bounds.width() + boundPad;
-        float h = bounds.height() + boundPad;
-        scale = Math.min(viewWidth / w, viewHeight / h);
+        if (panAndZoomSelection) {
+            float w = bounds.width() + boundPad;
+            float h = bounds.height() + boundPad;
+            scale = Math.min(viewWidth / w, viewHeight / h);
+        }
         dx = (-bounds.left - bounds.width() / 2) * scale + viewWidth / 2;
         dy = (-bounds.top - bounds.height() / 2) * scale + viewHeight / 2;
         updateMatrix();

@@ -19,8 +19,8 @@ import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
-    private val url = "<image_url>"
-    private val urlMap = "<map_url>"
+    private val url = ""
+    private val urlMap = ""
     private var target = object : Target {
         override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
 
