@@ -1,8 +1,10 @@
-# ImageMapAndroid 
+# ImageMapAndroid [![Release](https://jitpack.io/v/User/Repo.svg)](https://jitpack.io/#User/Repo)
 
 Credit to [Konstantin Burov](https://github.com/aectann)
 
 Its an extension to what he has created as github project [socratica-android](https://github.com/aectann/socratica-android)
+
+The main purpose to make further modification in this project is to add ability to add image source and map xml resource dynamically. This will benifit those who are looking to download image and map from remote server then show it in this view. And to control zooming behaviour of image.
 
 Add following gradle dependency in your project's `build.gradle`
 ```
@@ -37,6 +39,8 @@ Where
 
 There are plenty of applications to create imagemap xml file by selecting regions in image. An open source application is [GIMP](https://www.gimp.org/downloads/)
 
+**Usage**
+
 To get event callback for area click, add following code in your `Activity` file
 ```java
         ImageMap map = findViewById(R.id.map);
@@ -51,14 +55,50 @@ To get event callback for area click, add following code in your `Activity` file
         });
 ```
 
-**Changes**
-
 1. Added double tap zoom instead of single tap
-2. Can reset image to initial zoom level by calling `map.resetToOverviewMode()`. It returns true if reset is actually performed, false otherwise.
+2. To reset image to initial zoom level by calling `map.resetToOverviewMode()`. It returns true if reset is actually performed, false otherwise.
 Here's how we can do that :
-```kotlin
-    override fun onBackPressed() {
+```java
+    @Override
+    public void onBackPressed() {
         if (!map.resetToOverviewMode())
-            super.onBackPressed()
+            super.onBackPressed();
     }
 ```
+
+***Release Notes***
+
+**v1.2**
+
+Add images dynamically
+Note : This view only support image with actual resolution. Down sampled images not supported for now. Although it will take care of memory utilisation of bitmap.
+
+```java
+map.setImageFile(urlMap, bmpDrawable);
+```
+Picasso can be used to get image in required resolution using following code:
+
+```java
+    private Target target = new Target() {
+
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            Drawable bmpDrawable = new BitmapDrawable(getResources(), bitmap);
+            map.setImageFile(urlMap, bmpDrawable);
+        }
+
+        @Override
+        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+            
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+        }
+    };
+    
+    Picasso.get().load(urlImage).into(target);
+```
+
+Where `urlImage` is remote url image
