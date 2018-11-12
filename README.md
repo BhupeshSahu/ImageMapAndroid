@@ -71,6 +71,7 @@ Here's how we can do that :
 **v1.2**
 
 Add images dynamically
+
 Note : This view only support image with actual resolution. Down sampled images not supported for now. Although it will take care of memory utilisation of bitmap.
 
 ```java
