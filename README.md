@@ -1,4 +1,4 @@
-# ImageMapAndroid [![Release](https://jitpack.io/v/User/Repo.svg)](https://jitpack.io/#User/Repo)
+# ImageMapAndroid
 
 Credit to [Konstantin Burov](https://github.com/aectann)
 
