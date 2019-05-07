@@ -31,7 +31,7 @@ Where
 
 `selectionPadding` is padding applied for filling the color in area
 
-`seletionType` can be `stoke/fill`
+`seletionType` can be `stroke/fill`
 
 `selectionColor` is color for highlighting the selected area
 
