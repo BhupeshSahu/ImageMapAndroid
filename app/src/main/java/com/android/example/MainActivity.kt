@@ -15,7 +15,6 @@ import com.android.volley.toolbox.Volley
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val urlMap = ""
     private var target = object : Target {
         override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-
+            e?.printStackTrace()
         }
 
         override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
@@ -40,15 +39,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getAndSetMap() {
-        val stringRequest = object : StringRequest(com.android.volley.Request.Method.GET, urlMap,
+        val stringRequest = object : StringRequest(Method.GET, urlMap,
                 Response.Listener {
                     if (it != null && it.trim().isNotEmpty()) {
                         val mapResource = MapResource(ResourceType.RAW_STRING, it)
                         map.setMap(mapResource)
                     }
-                }, null) {
+                }, Response.ErrorListener { Log.e("", "Something went wrong", it.cause) }) {
         }
-        var reqQueue = Volley.newRequestQueue(this)
+        val reqQueue = Volley.newRequestQueue(this)
         reqQueue.add(stringRequest)
     }
 
@@ -60,7 +59,9 @@ class MainActivity : AppCompatActivity() {
             map.showArea(it)
             Toast.makeText(this, "Area clicked $it", Toast.LENGTH_SHORT).show()
         }
-        Picasso.get().load(url).into(target)
+//        Picasso.get().load(url).into(target)
+        map.setImageResource(R.drawable.floormap)
+        map.setMap(MapResource(R.xml.floor))
     }
 
     override fun onBackPressed() {

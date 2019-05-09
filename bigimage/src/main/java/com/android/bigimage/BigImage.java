@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory.Options;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -76,7 +77,7 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
         gestureDetector = new GestureDetector(context, this);
         this.setOnTouchListener(this);
         if (bitmapResource != 0) {
-            setImageDrawable(getImage());
+            super.setImageDrawable(getImage());
         }
     }
 
@@ -200,13 +201,27 @@ public class BigImage extends android.support.v7.widget.AppCompatImageView imple
             DRAWABLE_CACHE.put(getDrawableKey(),
                     new SoftReference<>(drawable));
         }
-        setImageDrawable(getImage());
+        super.setImageDrawable(drawable);
     }
+
 
     public void setImageResource(int drawable) {
         this.file = null;
         this.bitmapResource = drawable;
-        setImageDrawable(getImage());
+        super.setImageDrawable(getImage());
+    }
+
+
+    /**
+     *
+     * @deprecated Use setImageResource(int drawable) to set image resource dynamically,
+     * or set image in xml directly
+     */
+    @Deprecated
+    @Override
+    public void setImageDrawable(@Nullable Drawable drawable) {
+        throw new UnsupportedOperationException("This method is disabled. You can directly pass " +
+                "resource id in setImageResource(int drawable)");
     }
 
     private Options loadBitmapOpts() {
