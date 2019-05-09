@@ -8,7 +8,7 @@ The main purpose to make further modification in this project is to add ability 
 
 Add following gradle dependency in your project's `build.gradle`
 ```
-implementation 'com.github.BhupeshSahu.ImageMapAndroid:imagemap:v1.1'
+implementation 'com.github.BhupeshSahu.ImageMapAndroid:imagemap:v1.2.1'
 ```  
 
 Add following code in your `layout.xml` where you want to put `ImageMap`
@@ -31,7 +31,7 @@ Where
 
 `selectionPadding` is padding applied for filling the color in area
 
-`seletionType` can be `stoke/fill`
+`seletionType` can be `stroke/fill`
 
 `selectionColor` is color for highlighting the selected area
 
